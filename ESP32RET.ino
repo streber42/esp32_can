@@ -158,8 +158,8 @@ void loadSettings()
 void setup()
 {
     //delay(5000); //just for testing. Don't use in production
-
-    Serial.begin(1000000);
+    // devkit v1 board can't handle 1Mbps
+    Serial.begin(115200);
 
     SysSettings.isWifiConnected = false;
 
@@ -195,6 +195,12 @@ void setup()
     Serial.println(CFG_BUILD_NUM);
 
     if (settings.CAN0_Enabled) {
+        // TeensyController board setup
+        // Turn on Vio pin for CAN chip
+        pinMode(GPIO_NUM_13, OUTPUT);
+        digitalWrite(GPIO_NUM_13, HIGH);
+        // Use alternate pins
+        Can0.setCANPins(GPIO_NUM_12, GPIO_NUM_14);
         CAN0.enable();
         CAN0.begin(settings.CAN0Speed, 255);
         Serial.print("Enabled CAN0 with speed ");
