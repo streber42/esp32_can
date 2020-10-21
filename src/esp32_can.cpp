@@ -10,5 +10,5 @@ ESP32CAN CAN0(GPIO_NUM_16, GPIO_NUM_17) __attribute__((weak));
 
 //Select and uncomment the proper module you've got connected via SPI
             //CS, INT
-MCP2517FD CAN1(5, 27) __attribute__((weak));
+// MCP2517FD CAN1(5, 27) __attribute__((weak));
 //MCP2515 CAN1(5, 27) __attribute__((weak));
