@@ -127,7 +127,10 @@ BaseType_t IRAM_ATTR CAN_read_frame()
         __frame.MsgID = _CAN_GET_STD_ID;
 
         //deep copy data bytes
-        for(__byte_i = 0;__byte_i < __frame.FIR.B.DLC; __byte_i++)
+        if (__frame.FIR.B.DLC > 8) {
+            log_e("Id %d: DLC %d > 8", __frame.MsgID, __frame.FIR.B.DLC);
+        }
+        for(__byte_i = 0;__byte_i < __frame.FIR.B.DLC && __byte_i < 8; __byte_i++)
         	__frame.data.u8[__byte_i] = MODULE_CAN->MBX_CTRL.FCTRL.TX_RX.STD.data[__byte_i];
     }
     //extended frame
@@ -137,7 +140,7 @@ BaseType_t IRAM_ATTR CAN_read_frame()
         __frame.MsgID = _CAN_GET_EXT_ID;
 
         //deep copy data bytes
-        for(__byte_i=0;__byte_i < __frame.FIR.B.DLC; __byte_i++)
+        for(__byte_i=0;__byte_i < __frame.FIR.B.DLC && __byte_i < 8; __byte_i++)
         	__frame.data.u8[__byte_i] = MODULE_CAN->MBX_CTRL.FCTRL.TX_RX.EXT.data[__byte_i];
     }
 
