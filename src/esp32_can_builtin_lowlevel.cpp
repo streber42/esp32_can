@@ -128,7 +128,11 @@ BaseType_t IRAM_ATTR CAN_read_frame()
 
         //deep copy data bytes
         if (__frame.FIR.B.DLC > 8) {
-            log_e("Id %d: DLC %d > 8", __frame.MsgID, __frame.FIR.B.DLC);
+            log_e("Id %d: DLC %X > 8", __frame.MsgID, __frame.FIR.B.DLC);
+            //Let the hardware know the frame has been read.
+            MODULE_CAN->CMR.B.RRB = 1;
+
+            return false;
         }
         for(__byte_i = 0;__byte_i < __frame.FIR.B.DLC && __byte_i < 8; __byte_i++)
         	__frame.data.u8[__byte_i] = MODULE_CAN->MBX_CTRL.FCTRL.TX_RX.STD.data[__byte_i];
